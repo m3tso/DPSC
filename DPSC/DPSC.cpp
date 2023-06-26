@@ -35,7 +35,7 @@ int main(int, char**)
 	// ImGui_ImplWin32_EnableDpiAwareness();
 	WNDCLASSEXW wc = { sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"ImGui Example", nullptr };
 	::RegisterClassExW(&wc);
-	HWND hwnd = ::CreateWindowW(wc.lpszClassName, L"Level", WS_OVERLAPPEDWINDOW, 100, 100, 300, 200, nullptr, nullptr, wc.hInstance, nullptr);
+	HWND hwnd = ::CreateWindowW(wc.lpszClassName, L"DPSC", WS_OVERLAPPEDWINDOW, 100, 100, 300, 200, nullptr, nullptr, wc.hInstance, nullptr);
 
 	// Initialize Direct3D.
 	if (!CreateDeviceD3D(hwnd))
@@ -86,9 +86,9 @@ int main(int, char**)
 	ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
 
 	// Logic variables
-	int FireRate = 1;
-	int Damage = 1;
-	int HP = 100;
+	int FireRate = 850;
+	int Damage = 42;
+	int RTK = 3;
 
 	// Main loop
 	bool done = false;
@@ -153,15 +153,13 @@ int main(int, char**)
 
 			ImGui::InputInt("RPM", &FireRate, 1);
 			ImGui::InputInt("DMG", &Damage, 1);
-			ImGui::InputInt("HP", &HP, 1);
+			ImGui::InputInt("RTK", &RTK, 1);
 
 			// For DPS rounding to an integer is mostly fine.
 			float RPS = FireRate / 60.0;
 			float DPS = (RPS * Damage);
 
-			// Trick to round up.
-			int RoundsToKill = static_cast<float>(HP) / Damage + 0.5f;
-			float TTK = RoundsToKill / RPS;
+			float TTK = RTK / RPS;
 
 			std::string sDPS = std::to_string(DPS);
 			std::string sRPS = std::to_string(RPS);
